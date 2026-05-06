@@ -12,7 +12,7 @@
   <text font-family="sans-serif" font-size="10" x="340" y="66" text-anchor="middle" dominant-baseline="central" fill="#FAC775">max</text>
   <circle cx="210" cy="168" r="28" fill="#854F0B"/>
   <text font-family="sans-serif" font-size="15" font-weight="500" x="210" y="168" text-anchor="middle" dominant-baseline="central" fill="#FAEEDA">70</text>
-  <circle cx="470" cy="168" r="28" fill="#844F4"/>
+  <circle cx="470" cy="168" r="28" fill="#854F0B"/>
   <text font-family="sans-serif" font-size="15" font-weight="500" x="470" y="168" text-anchor="middle" dominant-baseline="central" fill="#FAEEDA">60</text>
   <circle cx="142" cy="260" r="24" fill="#BA7517"/>
   <text font-family="sans-serif" font-size="14" font-weight="500" x="142" y="260" text-anchor="middle" dominant-baseline="central" fill="#FAEEDA">40</text>

@@ -142,3 +142,28 @@ gcc -Wall -Wextra -o vector_test gen_vector/gen_vector.c gen_vector/main.c
 
 Built as part of the **Embedded & Real-Time** course —
 [Reichman University & Google School of Hi-Tech](https://www.runi.ac.il/en/schools/hi-tech/)
+
+---
+
+## 🖼️ Diagrams
+
+### Vector
+![Vector](images/vector.svg)
+
+### Stack
+![Stack](images/stack.svg)
+
+### Queue
+![Queue](images/queue.svg)
+
+### Doubly Linked List
+![Linked List](images/linked_list.svg)
+
+### Binary Search Tree
+![BST](images/bst.svg)
+
+### Heap
+![Heap](images/heap.svg)
+
+### Hash Map
+![Hash Map](images/hashmap.svg)

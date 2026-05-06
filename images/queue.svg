@@ -1,11 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="680" height="240" viewBox="0 0 680 240" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="230" viewBox="0 0 680 230" role="img">
   <title>Generic Queue — FIFO circular buffer</title>
-  <desc>A queue showing front and back pointers with enqueue and dequeue operations</desc>
-  <style>
-    text { font-family: sans-serif; fill: #3d3d3a; }
-    .th { font-size: 14px; font-weight: 500; }
-    .ts { font-size: 12px; }
-  </style>
+  <desc>Queue showing front and back pointers</desc>
   <defs>
     <marker id="at" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M2 1L8 5L2 9" fill="none" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
@@ -14,24 +9,24 @@
       <path d="M2 1L8 5L2 9" fill="none" stroke="#993C1D" stroke-width="1.5" stroke-linecap="round"/>
     </marker>
   </defs>
-  <rect x="60" y="90" width="90" height="60" rx="4" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5" opacity="0.5"/>
-  <text font-family="sans-serif" font-size="12" x="105" y="124" text-anchor="middle" dominant-baseline="central" fill="#888780" opacity="0.6">empty</text>
-  <rect x="158" y="90" width="90" height="60" rx="4" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
-  <text font-family="sans-serif" font-size="14" font-weight="500" x="203" y="114" text-anchor="middle" dominant-baseline="central" fill="#085041">data[1]</text>
-  <text font-family="sans-serif" font-size="12" x="203" y="132" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">← front</text>
-  <rect x="256" y="90" width="90" height="60" rx="4" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
-  <text font-family="sans-serif" font-size="14" font-weight="500" x="301" y="124" text-anchor="middle" dominant-baseline="central" fill="#444441">data[2]</text>
-  <rect x="354" y="90" width="90" height="60" rx="4" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
-  <text font-family="sans-serif" font-size="14" font-weight="500" x="399" y="124" text-anchor="middle" dominant-baseline="central" fill="#444441">data[3]</text>
-  <rect x="452" y="90" width="90" height="60" rx="4" fill="#FAECE7" stroke="#993C1D" stroke-width="1"/>
-  <text font-family="sans-serif" font-size="14" font-weight="500" x="497" y="114" text-anchor="middle" dominant-baseline="central" fill="#712B13">data[4]</text>
-  <text font-family="sans-serif" font-size="12" x="497" y="132" text-anchor="middle" dominant-baseline="central" fill="#993C1D">← back</text>
-  <rect x="550" y="90" width="90" height="60" rx="4" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5" opacity="0.5"/>
-  <text font-family="sans-serif" font-size="12" x="595" y="124" text-anchor="middle" dominant-baseline="central" fill="#888780" opacity="0.6">empty</text>
-  <line x1="158" y1="70" x2="60" y2="70" fill="none" stroke="#0F6E56" stroke-width="1.5" marker-end="url(#at)"/>
-  <text font-family="sans-serif" font-size="12" x="109" y="58" text-anchor="middle" fill="#0F6E56">QueueRemove()</text>
-  <line x1="542" y1="70" x2="640" y2="70" fill="none" stroke="#993C1D" stroke-width="1.5" marker-end="url(#ac)"/>
-  <text font-family="sans-serif" font-size="12" x="591" y="58" text-anchor="middle" fill="#993C1D">QueueInsert()</text>
-  <text font-family="sans-serif" font-size="12" x="340" y="185" text-anchor="middle" fill="#888780">FIFO - first in, first out - circular buffer</text>
-  <text font-family="sans-serif" font-size="12" x="340" y="205" text-anchor="middle" fill="#B4B2A9">capacity = 6  size = 4  both operations O(1)</text>
+  <rect x="40" y="85" width="86" height="60" rx="14" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="1" stroke-dasharray="4 2" opacity="0.6"/>
+  <text font-family="sans-serif" font-size="11" x="83" y="115" text-anchor="middle" dominant-baseline="central" fill="#B4B2A9">empty</text>
+  <rect x="134" y="85" width="86" height="60" rx="14" fill="#0F6E56"/>
+  <text font-family="sans-serif" font-size="13" font-weight="500" x="177" y="108" text-anchor="middle" dominant-baseline="central" fill="#E1F5EE">data[1]</text>
+  <text font-family="sans-serif" font-size="11" x="177" y="126" text-anchor="middle" dominant-baseline="central" fill="#9FE1CB">front</text>
+  <rect x="228" y="85" width="86" height="60" rx="14" fill="#1D9E75"/>
+  <text font-family="sans-serif" font-size="13" font-weight="500" x="271" y="115" text-anchor="middle" dominant-baseline="central" fill="#E1F5EE">data[2]</text>
+  <rect x="322" y="85" width="86" height="60" rx="14" fill="#5DCAA45"/>
+  <text font-family="sans-serif" font-size="13" font-weight="500" x="365" y="115" text-anchor="middle" dominant-baseline="central" fill="#04342C">data[3]</text>
+  <rect x="416" y="85" width="86" height="60" rx="14" fill="#D85A30"/>
+  <text font-family="sans-serif" font-size="13" font-weight="500" x="459" y="108" text-anchor="middle" dominant-baseline="central" fill="#FAECE7">data[4]</text>
+  <text font-family="sans-serif" font-size="11" x="459" y="126" text-anchor="middle" dominant-baseline="central" fill="#F5C4B3">back</text>
+  <rect x="510" y="85" width="86" height="60" rx="14" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="1" stroke-dasharray="4 2" opacity="0.6"/>
+  <text font-family="sans-serif" font-size="11" x="553" y="115" text-anchor="middle" dominant-baseline="central" fill="#B4B2A9">empty</text>
+  <line x1="134" y1="65" x2="40" y2="65" stroke="#0F6E56" stroke-width="1.5" marker-end="url(#at)"/>
+  <text font-family="sans-serif" font-size="12" x="87" y="53" text-anchor="middle" fill="#0F6E56" font-weight="500">QueueRemove()</text>
+  <line x1="502" y1="65" x2="596" y2="65" stroke="#993C1D" stroke-width="1.5" marker-end="url(#ac)"/>
+  <text font-family="sans-serif" font-size="12" x="549" y="53" text-anchor="middle" fill="#993C1D" font-weight="500">QueueInsert()</text>
+  <text font-family="sans-serif" font-size="12" x="320" y="175" text-anchor="middle" fill="#888780">FIFO — first in, first out — circular buffer</text>
+  <text font-family="sans-serif" font-size="11" x="320" y="193" text-anchor="middle" fill="#B4B2A9">capacity = 6 · size = 4 · both operations O(1)</text>
 </svg>

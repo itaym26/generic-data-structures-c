@@ -1,6 +1,6 @@
 #include <stdlib.h> 
 #include <stdio.h>  
-#include "list.h"   
+#include "gen_double_linked_list.h"   
 
 /* Internal Node structure */
 typedef struct Node Node;

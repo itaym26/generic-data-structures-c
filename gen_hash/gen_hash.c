@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include "gen_hash.h"
 
-typedef struct Node{
+typedef struct Node Node;
+
+struct Node {
     void* m_key;
     void* m_value;
-    Node* m_next;
-} Node;
+    struct Node* m_next;
+};
 
 typedef struct HashMap {
    Node** m_buckets;//array of pointers to nodes
@@ -76,7 +78,7 @@ void HashMap_Destroy(HashMap** _map, void (*_keyDestroy)(void* _key), void (*_va
 
    //iterate over each bucket and free all nodes
     for(i = 0; i<(*_map)->m_capacity; i++){
-        curent = (*_map)->m_buckets[i];
+        current = (*_map)->m_buckets[i];
         while(current != NULL){
             next = current->m_next;//save pointer to next node before freeing current
             if(_keyDestroy != NULL) _keyDestroy(current->m_key);
@@ -109,9 +111,8 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value){
         }
         current = current->m_next;
 }
-    newNode = (Node*) malloc(sizeof(Node));
-    if (newNode == NULL) return MAP_ALLOCATION_ERROR;
     newNode = CreateNode(_key, _value);
+    if (newNode == NULL) return MAP_ALLOCATION_ERROR;
 
     newNode->m_next = _map->m_buckets[index];//insert new node at the beginning of the linked list for the bucket
     _map->m_buckets[index] = newNode;//update bucket to point to the
@@ -132,7 +133,7 @@ Map_Result HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pKey, v
 
     //search for the key in the linked list for the bucket
     while( current != NULL){
-        if (_map->m_keysEqualFunc(current->m_key, _searhKey)){
+        if (_map->m_keysEqualFunc(current->m_key, _searchKey)){
             //key found, remove node from linked list
             if (prev == NULL) {
                 _map->m_buckets[index] = current->m_next;//removing first node in the bucket
@@ -173,7 +174,7 @@ size_t HashMap_Size(const HashMap* _map) {
     if (_map == NULL) {
         return 0;
     }
-    return _map->m_numOfItems;
+    return _map->m_numsOfItems;
 }
 
 size_t HashMap_ForEach(const HashMap* _map, KeyValueActionFunction _action, void* _context) {
@@ -190,8 +191,7 @@ size_t HashMap_ForEach(const HashMap* _map, KeyValueActionFunction _action, void
         
         // Inner loop: Iterate over the linked list in the current bucket 
         while (currNode != NULL) {
-            count++; /* Count the number of times the action function is invoked 
-            
+            count++; /* Count the number of times the action function is invoked */
             /* Invoke the user-provided action function on the key and value.
                Note: The value is passed without const so it can be modified. */
             if (_action((const void*)currNode->m_key, currNode->m_value, _context) == 0) {

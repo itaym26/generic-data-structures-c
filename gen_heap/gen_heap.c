@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "genheap.h"
+#include "gen_heap.h"
 #include "gen_vector.h"
 
 /* Macros for calculating heap indices (assuming a 0-based array) */
@@ -9,14 +9,14 @@
 #define HEAP_MAGIC 0xDEADBEEF
 
 struct Heap {
-    vector* m_vec;       // The underlying vector storing the elements (matching your struct)
+    Vector* m_vec;       // The underlying Vector storing the elements (matching your struct)
     Comparator m_comp;   // The comparison function
     unsigned int m_magic;// Magic number to protect against double free
 };
 
 
-// Swaps two elements in the underlying vector
-static void Swap(vector* _vec, size_t _i, size_t _j) {
+// Swaps two elements in the underlying Vector
+static void Swap(Vector* _vec, size_t _i, size_t _j) {
     void *val1, *val2;
     VectorGet(_vec, _i, &val1);
     VectorGet(_vec, _j, &val2);
@@ -87,7 +87,7 @@ static void HeapifyUp(Heap* _heap, size_t _index) {
     }
 }
 
-Heap* HeapBuild(vector* _vector, Comparator _pfComp) {
+Heap* HeapBuild(Vector* _vector, Comparator _pfComp) {
     Heap* heap;
     size_t size, i;
 
@@ -105,7 +105,7 @@ Heap* HeapBuild(vector* _vector, Comparator _pfComp) {
     heap->m_comp = _pfComp;
     heap->m_magic = HEAP_MAGIC;
 
-    // Transform the existing vector into a heap by calling HeapifyDown 
+    // Transform the existing Vector into a heap by calling HeapifyDown 
     // from the last parent node all the way up to the root
     size = VectorSize(_vector);
     if (size > 1) {
@@ -118,8 +118,8 @@ Heap* HeapBuild(vector* _vector, Comparator _pfComp) {
     return heap;
 }
 
-vector* HeapDestroy(Heap** _heap) {
-    vector* vec;
+Vector* HeapDestroy(Heap** _heap) {
+    Vector* vec;
 
     // Check for NULL pointer or already destroyed heap
     if (_heap == NULL || *_heap == NULL || (*_heap)->m_magic != HEAP_MAGIC) {
@@ -131,7 +131,7 @@ vector* HeapDestroy(Heap** _heap) {
     free(*_heap);
     *_heap = NULL;
 
-    return vec; // Return the vector to the user so they can free it
+    return vec; // Return the Vector to the user so they can free it
 }
 
 HeapResultCode HeapInsert(Heap* _heap, void* _element) {
@@ -139,7 +139,7 @@ HeapResultCode HeapInsert(Heap* _heap, void* _element) {
         return HEAP_NOT_INITIALIZED;
     }
 
-    // Append the element to the end of the vector using your vector API
+    // Append the element to the end of the Vector using your Vector API
     if (VectorAppend(_heap->m_vec, _element) != VECTOR_SUCCESS) {
         return HEAP_REALLOCATION_FAILED;
     }
@@ -177,7 +177,7 @@ void* HeapExtract(Heap* _heap) {
         Swap(_heap->m_vec, 0, size - 1);
     }
 
-    // Remove the last element (which is now the old root) from the vector
+    // Remove the last element (which is now the old root) from the Vector
     VectorRemove(_heap->m_vec, &lastElement);
 
     // If elements remain, restore the heap structure from top to bottom
@@ -195,7 +195,7 @@ size_t HeapSize(const Heap* _heap) {
     return VectorSize(_heap->m_vec);
 }
 
-size_t HeapForEach(const Heap* _heap, ActionFunction _act, void* _context) {
+size_t HeapForEach(const Heap* _heap, HeapActionFunction _act, void* _context) {
     size_t i, size, count = 0;
     void* elem;
 

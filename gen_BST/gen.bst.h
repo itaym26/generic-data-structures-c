@@ -128,11 +128,11 @@ void* BSTreeItrGet(BSTreeItr _it);
  * or on reaching end of the conrainer
  *
  * @params _tree : tree to iterate over
- * @params _mode : Traversal mode - TREE_TRAVERSAL_PREORDER, TREE_TRAVERSAL_INORDER or TREE_TRAVERSAL_POSTORDER
+ * @params _mode : Traversal mode - BSTREE_TRAVERSAL_PREORDER, BSTREE_TRAVERSAL_INORDER or BSTREE_TRAVERSAL_POSTORDER
  * @params _action : Action function to call for each element
  * @params _context : Parameters for the function
  * @return Iterator to end or an iterator to the specific element where action returned none zero value
  */
 BSTreeItr BSTreeForEach(const BSTree* _tree, BSTreeTraversalMode _mode, ActionFunction _action, void* _context);
 
-#endif /* __BSTREE_H__ *
+#endif /* __BSTREE_H__ */

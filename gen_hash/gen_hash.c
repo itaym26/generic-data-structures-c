@@ -204,3 +204,50 @@ size_t HashMap_ForEach(const HashMap* _map, KeyValueActionFunction _action, void
 
     return count; // Iterated over the entire map successfully 
 }
+
+Map_Result HashMap_Rehash(HashMap *_map, size_t _newCapacity){
+    if (_map == NULL) return MAP_UNINITIALIZED_ERROR;
+
+    size_t newCapacity = GetNextPrime(_newCapacity);
+    Node** newBuckets = (Node**) calloc(newCapacity, sizeof(Node*));
+    if (newBuckets == NULL) return MAP_ALLOCATION_ERROR;
+
+    // Move every node to its bucket in the new table; keys are not copied
+    for (size_t i = 0; i < _map->m_capacity; i++) {
+        Node* current = _map->m_buckets[i];
+        while (current != NULL) {
+            Node* next = current->m_next;
+            size_t index = _map->m_hashFunc(current->m_key) % newCapacity;
+            current->m_next = newBuckets[index];
+            newBuckets[index] = current;
+            current = next;
+        }
+    }
+
+    free(_map->m_buckets);
+    _map->m_buckets = newBuckets;
+    _map->m_capacity = newCapacity;
+    return MAP_SUCCESS;
+}
+
+Map_Stats HashMap_GetStatistics(const HashMap* _map){
+    Map_Stats stats = {0, 0, 0, 0};
+    if (_map == NULL) return stats;
+
+    stats.numberOfBuckets = _map->m_capacity;
+    size_t totalChainLength = 0;
+    for (size_t i = 0; i < _map->m_capacity; i++) {
+        size_t chainLength = 0;
+        for (Node* current = _map->m_buckets[i]; current != NULL; current = current->m_next) {
+            chainLength++;
+        }
+        if (chainLength > 0) {
+            stats.numberOfChains++;
+            totalChainLength += chainLength;
+            if (chainLength > stats.maxChainLength) stats.maxChainLength = chainLength;
+        }
+    }
+    // Average over the chains that exist (empty buckets are not chains)
+    stats.averageChainLength = (stats.numberOfChains > 0) ? totalChainLength / stats.numberOfChains : 0;
+    return stats;
+}

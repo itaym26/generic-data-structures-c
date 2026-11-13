@@ -16,7 +16,15 @@
 typedef struct BSTree  BSTree;
 typedef void*  BSTreeItr;
 
-typedef int (*Comparator)(void* _left, void* _right);
+typedef int (*BSTComparator)(void* _left, void* _right);
+
+#ifdef BST_ENABLE_LEGACY_COMPARATOR
+#ifdef HEAP_ENABLE_LEGACY_COMPARATOR
+#error "Only one legacy Comparator alias may be enabled in a translation unit."
+#endif
+typedef BSTComparator Comparator;
+#endif
+
 
 /** 
  * @brief Action function to operate on an element
@@ -44,7 +52,7 @@ typedef enum
  * @return a pointer to the newly created tree.
  * @retval NULL on failure due to allocation failure or NULL function pointer given
  */
-BSTree* BSTreeCreate(Comparator _less);
+BSTree* BSTreeCreate(BSTComparator _less);
 
 /** 
  * @brief Destroy tree

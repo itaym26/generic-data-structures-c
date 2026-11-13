@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include "dynamic_array.h" 
+#include "dyn_alloc_struct.h" 
 
 int check_parameters(unsigned initialSize, int blockSize) {
     if (initialSize == 0 && blockSize == 0) return NULL_POINTER;
@@ -36,7 +36,7 @@ void DynamicArrayDestroy(darr* arr) {
 int DynamicArrayInsert(darr *DynamicArrayPtr, int data) {
     if (DynamicArrayPtr == NULL) return NULL_POINTER; // Check for null pointer
 
-    if (DynamicArrayPtr->NumOfElements >= DynamicArrayPtr->dArraySize) { // Check if resizing is needed
+    if ((unsigned)DynamicArrayPtr->NumOfElements >= DynamicArrayPtr->dArraySize) { // Check if resizing is needed
         if (DynamicArrayPtr->dArrayBlockSize == 0) return Overflow; // No block size defined, cannot resize
 
         int newSize = DynamicArrayPtr->dArraySize + DynamicArrayPtr->dArrayBlockSize; // Calculate new size
@@ -64,4 +64,3 @@ int DynamicArrayDelete(darr *DynamicArrayPtr, int* data) {
     
     return OK;
 }
-

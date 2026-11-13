@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "vector.h"
+#include "gen_vector.h"
 
 /* Helper function to print integers during VectorForEach */
 int PrintInt(void* _element, size_t _index, void* _context) {
     int* num = (int*)_element;
+    (void)_context;
     printf("Index %zu: Value %d\n", _index, *num);
     return 1; /* Return 1 to continue iteration */
 }

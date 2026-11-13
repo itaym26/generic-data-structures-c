@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "BSTree.h"
+#include "gen.bst.h"
 
 typedef struct BSTreeNode
 {
@@ -71,14 +71,13 @@ BSTreeItr BSTreeInsert(BSTree* _tree, void* _item){
     BSTreeNode* current = _tree->m_sentinel->m_left;
 
     while (current != NULL){
-        parrent = current;
+        parent = current;
         if (_tree->m_Less(_item, current->m_data)) {
             current = current->m_left;
         } else if (_tree->m_Less(current->m_data, _item)) {
             current = current->m_right;
         } else {
-            // Duplicate item, free the new node and return NULL
-            free(newNode);
+            // Duplicate item: nothing was allocated, just report the end iterator
             return (BSTreeItr)_tree->m_sentinel; // return end iterator on failure
         }
     }
@@ -101,7 +100,8 @@ BSTreeItr BSTreeInsert(BSTree* _tree, void* _item){
 BSTreeItr BSTreeItrBegin(const BSTree* _tree){
     if (_tree == NULL) return NULL;
     BSTreeNode* current = _tree->m_sentinel->m_left; // Start from the root
-    while (current != NULL && current->m_left != NULL) {
+    if (current == NULL) return (BSTreeItr)(void*)_tree->m_sentinel; // Empty tree: begin == end
+    while (current->m_left != NULL) {
         current = current->m_left; // Move to the leftmost node
     }
     return (BSTreeItr)current; // Return iterator to the leftmost node
@@ -163,15 +163,17 @@ BSTreeItr BSTreeItrRemove(BSTreeItr _it){
     BSTreeNode* parent = nodeToRemove->m_parent;
     BSTreeNode* replacement = NULL;
 
+    /* Only the sentinel (the end iterator) has no parent; it must never be removed. */
+    if (parent == NULL) return _it;
+
     if (nodeToRemove->m_left != NULL && nodeToRemove->m_right != NULL) {
-        // Node has two children, find the in-order successor (smallest in the right subtree)
+        /* Two children: copy the in-order successor's data into this node,
+           then unlink and free the successor node. */
         replacement = nodeToRemove->m_right;
         while (replacement->m_left != NULL) {
             replacement = replacement->m_left;
         }
-        // Replace node's data with replacement's data
         nodeToRemove->m_data = replacement->m_data;
-        // Now we need to remove the replacement node
         parent = replacement->m_parent;
         if (replacement->m_right != NULL) {
             replacement->m_right->m_parent = parent;
@@ -181,29 +183,40 @@ BSTreeItr BSTreeItrRemove(BSTreeItr _it){
         } else {
             parent->m_right = replacement->m_right;
         }
+        free(replacement); // Free the unlinked successor node
+        return (BSTreeItr)nodeToRemove; // This node stays, now holding the successor's data
+    }
+
+    // Node has at most one child
+    replacement = (nodeToRemove->m_left != NULL) ? nodeToRemove->m_left : nodeToRemove->m_right;
+    if (replacement != NULL) {
+        replacement->m_parent = parent;
+    }
+    if (parent->m_left == nodeToRemove) {
+        parent->m_left = replacement;
     } else {
-        // Node has at most one child
-        replacement = (nodeToRemove->m_left != NULL) ? nodeToRemove->m_left : nodeToRemove->m_right;
-        if (replacement != NULL) {
-            replacement->m_parent = parent;
-        }
-        if (parent == NULL) {
-            // Removing the root node
-            _tree->m_sentinel->m_left = replacement; // Update root
-        } else if (parent->m_left == nodeToRemove) {
-            parent->m_left = replacement;
-        } else {
-            parent->m_right = replacement;
-        }
+        parent->m_right = replacement;
     }
     free(nodeToRemove); // Free the removed node
-    return (BSTreeItr)replacement; // Return iterator to the next element after removal
+    return (BSTreeItr)replacement; // The child that took its place (NULL when it was a leaf)
 }
 
 void* BSTreeItrGet(BSTreeItr _it){
     BSTreeNode* node = (BSTreeNode*)_it;
     if (node == NULL) return NULL;
     return node->m_data;    
+}
+
+static BSTreeNode* ForEachRec(BSTreeNode* _node, BSTreeTraversalMode _mode, ActionFunction _action, void* _context);
+
+/* The header promises BSTreeForEach; the recursive worker below implements
+   the traversal and this wrapper connects them. */
+BSTreeItr BSTreeForEach(const BSTree* _tree, BSTreeTraversalMode _mode, ActionFunction _action, void* _context){
+    if (_tree == NULL || _action == NULL) return NULL;
+    {
+        BSTreeNode* stop = ForEachRec(_tree->m_sentinel->m_left, _mode, _action, _context);
+        return (stop != NULL) ? (BSTreeItr)stop : (BSTreeItr)(void*)_tree->m_sentinel;
+    }
 }
 
 static BSTreeNode* ForEachRec(BSTreeNode* _node, BSTreeTraversalMode _mode, ActionFunction _action, void* _context) {
@@ -215,7 +228,7 @@ static BSTreeNode* ForEachRec(BSTreeNode* _node, BSTreeTraversalMode _mode, Acti
     }
 
     // first case: PRE_ORDER 
-    if (_mode == TREE_TRAVERSAL_PREORDER) {
+    if (_mode == BSTREE_TRAVERSAL_PREORDER) {
         if (_action(_node->m_data, _context) != 0) return _node; // אם הפעולה החזירה שונה מ-0, עוצרים
     }
 
@@ -224,7 +237,7 @@ static BSTreeNode* ForEachRec(BSTreeNode* _node, BSTreeTraversalMode _mode, Acti
     if (result != NULL) return result; // אם העצירה קרתה בצד שמאל, מגלגלים אותה למעלה
 
     // second case: IN_ORDER
-    if (_mode == TREE_TRAVERSAL_INORDER) {
+    if (_mode == BSTREE_TRAVERSAL_INORDER) {
         if (_action(_node->m_data, _context) != 0) return _node;
     }
 
@@ -233,10 +246,9 @@ static BSTreeNode* ForEachRec(BSTreeNode* _node, BSTreeTraversalMode _mode, Acti
     if (result != NULL) return result;
 
     // third case: POST_ORDER 
-    if (_mode == TREE_TRAVERSAL_POSTORDER) {
+    if (_mode == BSTREE_TRAVERSAL_POSTORDER) {
         if (_action(_node->m_data, _context) != 0) return _node;
     }
 
     return NULL; 
 }
-

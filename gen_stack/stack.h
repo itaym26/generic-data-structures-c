@@ -105,4 +105,4 @@ int StackIsEmpty(Stack* _stack);
  */
 size_t StackPrint(const Stack* _stack, StackElementAction _action, void* _context);
 
-#endif /* __STACK_H__ *
+#endif /* __STACK_H__ */

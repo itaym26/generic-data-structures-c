@@ -12,9 +12,17 @@ typedef enum Heap_ResultCode {
 
 typedef struct Heap Heap;
 typedef int (*HeapActionFunction)(const void* _elem, void* _context);
-typedef int (*Comparator)(const void* _left, const void* _right);
+typedef int (*HeapComparator)(const void* _left, const void* _right);
 
-Heap*        HeapBuild(Vector* _vector, Comparator _pfComp);
+#ifdef HEAP_ENABLE_LEGACY_COMPARATOR
+#ifdef BST_ENABLE_LEGACY_COMPARATOR
+#error "Only one legacy Comparator alias may be enabled in a translation unit."
+#endif
+typedef HeapComparator Comparator;
+#endif
+
+
+Heap*        HeapBuild(Vector* _vector, HeapComparator _pfComp);
 Vector*      HeapDestroy(Heap** _heap);
 HeapResultCode HeapInsert(Heap* _heap, void* _element);
 const void*  HeapPeek(const Heap* _heap);

@@ -12,7 +12,7 @@ typedef struct BSTreeNode
 
 struct BSTree{
     BSTreeNode* m_sentinel;//pointer to the root node the left sun is the first node in the tree and the right is null
-    Comparator m_Less;//function pointer to the comparator function
+    BSTComparator m_Less;//function pointer to the comparator function
 };
 
 static BSTreeNode* CreateNode(void* _item) {
@@ -24,7 +24,7 @@ static BSTreeNode* CreateNode(void* _item) {
     }
     return newNode;
 }
-BSTree* BSTreeCreate(Comparator _less){
+BSTree* BSTreeCreate(BSTComparator _less){
     if(_less == NULL) return NULL;
     BSTree* tree = (BSTree*)malloc(sizeof(BSTree));
     if(tree == NULL) return NULL;

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "gen_heap.h"
-#include "gen_vector.h"
+#include "../gen_vector/gen_vector.h"
 
 /* Macros for calculating heap indices (assuming a 0-based array) */
 #define PARENT(i) (((i) - 1) / 2)

@@ -12,6 +12,7 @@ Stack* StackCreate(size_t _initialCapacity, size_t _blockSize){
     Stack* stack = (Stack*)malloc(sizeof(Stack));
     if(stack == NULL) return NULL;
     if(_initialCapacity == 0 && _blockSize == 0){
+        free(stack);
         return NULL;
     }
     stack->m_vector = VectorCreate(_initialCapacity, _blockSize);

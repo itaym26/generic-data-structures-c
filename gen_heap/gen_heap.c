@@ -10,7 +10,7 @@
 
 struct Heap {
     Vector* m_vec;       // The underlying Vector storing the elements (matching your struct)
-    Comparator m_comp;   // The comparison function
+    HeapComparator m_comp;   // The comparison function
     unsigned int m_magic;// Magic number to protect against double free
 };
 
@@ -87,7 +87,7 @@ static void HeapifyUp(Heap* _heap, size_t _index) {
     }
 }
 
-Heap* HeapBuild(Vector* _vector, Comparator _pfComp) {
+Heap* HeapBuild(Vector* _vector, HeapComparator _pfComp) {
     Heap* heap;
     size_t size, i;
 

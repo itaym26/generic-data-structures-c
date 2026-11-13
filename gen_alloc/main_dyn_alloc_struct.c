@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <file.h>
-#include "dynamic_array.h"
+#include "dyn_alloc_struct.h"
 
 #define OK 0
 #define NULL_POINTER -1
@@ -12,7 +11,7 @@ typedef struct {
     long id;
 } Person;
 
-typedef struct arry_person {
+typedef struct ap {
     Person* people;
     int size;
 } ap;
@@ -85,13 +84,17 @@ int main() {
     fclose(file);
 
     Person loded_people[3];
+    char loded_names[3][64];
+    for (int i = 0; i < 3; i++) {
+        loded_people[i].name = loded_names[i];
+    }
     file = fopen("people.txt", "r");    
     if (file == NULL) {
         perror("Failed to open file");
         return 1;
     }
     for (int i = 0; i < 3; i++) {
-        fscanf(file, "%s - %ld", loded_people[i].name, &loded_people[i].id);
+        fscanf(file, "%63s - %ld", loded_people[i].name, &loded_people[i].id);
     }
     fclose(file);
     
@@ -119,24 +122,17 @@ int main() {
     for (int i = 0; i < 3; i++) {
         printf("Loaded person from binary file: %s - %ld\n", loaded_people1[i].name, loaded_people1[i].id);
     }
-    FILE* file = fopen("people.bin", "r+b");
-    if (file == NULL) {
-        perror("Failed to open file");
-        return 1;
-    }
-
-    FILE* file = fopen("people.bin", "rb");
+    file = fopen("people.bin", "rb");
     fseek(file, 2*sizeof(Person), SEEK_SET);
     Person third_person;
     fread(&third_person, sizeof(Person), 1, file);
     fclose(file);
     printf("Third person from binary file: %s - %ld\n", third_person.name, third_person.id);
 
+    file = fopen("people.bin", "r+b");
     fseek(file, 2 * sizeof(Person), SEEK_SET);
 
-    Person new_person;
-    strcpy(new_person.name, "David"); 
-    new_person.id = 999;              
+    Person new_person = {"David", 999};
 
     fwrite(&new_person, sizeof(Person), 1, file);
     fclose(file);
